@@ -1,0 +1,27 @@
+name: Cloud check in action
+on:
+  push:
+    branches:
+      - main
+  watch:
+    types: started
+  schedule:
+    - cron: 35 3 * * *
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: user
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: init
+      run: npm install
+    - name: run
+      env:
+        TY_USER_NAME: ${{secrets.TY_USER_NAME}}
+        TY_PASSWORD: ${{secrets.TY_PASSWORD}}
+      run: npm start
